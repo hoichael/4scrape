@@ -1,0 +1,23 @@
+{
+  "name": "4scrape",
+  "version": "1.0.0",
+  "description": "",
+  "main": "4scrape.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoichael/4scrape.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hoichael/4scrape/issues"
+  },
+  "homepage": "https://github.com/hoichael/4scrape#readme",
+  "dependencies": {
+    "puppeteer": "^10.2.0"
+  }
+}
