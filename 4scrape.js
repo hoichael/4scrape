@@ -1,9 +1,27 @@
+// global vars
+const errorText = "oops";
+const helpText = "help lol";
+
 // entry point
 const init = () => {
-  console.log("yo");
   const args = process.argv.slice(2);
-  console.log(args);
-  console.log(args.length);
+
+  if (args.length === 0) {
+    printMessage(errorText);
+  } else if (args.includes("--help") || args.includes("-h")) {
+    printMessage(helpText);
+  } else {
+    initScrape(args);
+  }
+};
+
+const printMessage = (msg) => {
+  console.log(msg);
+  process.exit();
+};
+
+const initScrape = (args) => {
+  console.log("init");
 };
 
 // call entry point
