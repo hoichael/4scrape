@@ -1,3 +1,6 @@
+// imports
+const puppeteer = require("puppeteer");
+
 // global vars
 const errorText = "oops";
 const helpText = "help lol";
@@ -20,8 +23,17 @@ const printMessage = (msg) => {
   process.exit();
 };
 
-const initScrape = (args) => {
+const initScrape = async (args) => {
   console.log("init");
+
+  const browserInstance = await puppeteer.launch({ headless: false });
+  const page = await browserInstance.newPage();
+
+  try {
+    await page.goto(args[0]);
+  } catch (error) {
+    printMessage(errorText);
+  }
 };
 
 // call entry point
