@@ -29,22 +29,46 @@ const genJSON = async (page) => {
 
   for (let i = 0; i < containersArr.length; i++) {
     arr.push({
-      postNum: await containersArr[i].$eval(".postNum", (el) => el.innerText),
+      dateTime: await (
+        await containersArr[i].$eval(".postNum", (el) => el.innerText)
+      ).split(" ")[0],
+      postNum: await (
+        await containersArr[i].$eval(".postNum", (el) => el.innerText)
+      ).split(" ")[1],
+      replyingTo: await getReplies(containersArr[i]),
       message: await containersArr[i].$eval(
         ".postMessage",
         (el) => el.innerText
       ),
-      img: await checkForImage(containersArr[i]),
+      imgURL: await getImage(containersArr[i], true),
+      img: await getImage(containersArr[i], false),
     });
   }
 
   return arr;
 };
 
-const checkForImage = async (element) => {
+const getReplies = async (post) => {
+  repliesArr = [];
+
   try {
-    const src = await element.$eval("img", (el) => el.getAttribute("src"));
-    return src;
+    repliesArr = await post.$$eval(".postMessage > .quotelink", (x) =>
+      x.map((y) => y.innerText.slice(2))
+    );
+    return repliesArr;
+  } catch (error) {
+    return repliesArr;
+  }
+};
+
+const getImage = async (post, asURL) => {
+  try {
+    const src = await post.$eval("img", (el) => el.getAttribute("src"));
+    if (asURL) {
+      return src;
+    } else {
+      return src.split("/").pop();
+    }
   } catch (error) {
     return undefined;
   }
