@@ -1,6 +1,7 @@
 // imports
 const puppeteer = require("puppeteer");
 const strings = require("./strings");
+const fs = require("fs/promises");
 
 const initScrape = async (args) => {
   const browserInstance = await puppeteer.launch({ headless: true });
@@ -11,6 +12,7 @@ const initScrape = async (args) => {
     await manageScrape(args, page);
   } catch (error) {
     console.log(strings.stringObj.errorTextURL);
+    process.exit();
   }
 
   await browserInstance.close();
@@ -19,22 +21,58 @@ const initScrape = async (args) => {
 };
 
 const manageScrape = async (args, page) => {
+  // get relevant data from all posts in json format. this object serves as a base for most of the other output formats
   const jsonArr = await genJSON(page);
-  console.log(jsonArr);
+  //  console.log(jsonArr);
+  // create directory with unique name based on current date and time (should probably accomodate for different time notations)
+  const dirName = new Date().toString().slice(0, 24).replaceAll(":", "_");
+  fs.mkdir(dirName);
+
+  if (args.includes("--all") || args.includes("-a")) {
+    args.push("-j", "-s", "-t", "-i", "-p");
+  }
+
+  if (args.includes("--json") || args.includes("-j")) {
+    console.log("output: json");
+    await fs.writeFile(
+      `./${dirName}/yield_json.json`,
+      JSON.stringify(jsonArr, null, 2)
+    );
+  }
+
+  if (args.includes("--screenshot") || args.includes("-s")) {
+    console.log("output: screenshot");
+  }
+
+  if (args.includes("--text") || args.includes("-t")) {
+    console.log("output: text");
+  }
+
+  if (args.includes("--pdf") || args.includes("-p")) {
+    console.log("output: pdf");
+  }
+
+  if (args.includes("--images") || args.includes("-i")) {
+    console.log("output: images");
+  }
 };
 
 const genJSON = async (page) => {
-  let arr = [];
+  let jsonOutput = {
+    data: [],
+  };
   const containersArr = await page.$$(".postContainer");
 
   for (let i = 0; i < containersArr.length; i++) {
-    arr.push({
+    jsonOutput.data.push({
       dateTime: await (
         await containersArr[i].$eval(".postNum", (el) => el.innerText)
       ).split(" ")[0],
       postNum: await (
         await containersArr[i].$eval(".postNum", (el) => el.innerText)
-      ).split(" ")[1],
+      )
+        .split(" ")[1]
+        .slice(3),
       replyingTo: await getReplies(containersArr[i]),
       message: await containersArr[i].$eval(
         ".postMessage",
@@ -45,7 +83,7 @@ const genJSON = async (page) => {
     });
   }
 
-  return arr;
+  return jsonOutput;
 };
 
 const getReplies = async (post) => {
