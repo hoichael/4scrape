@@ -51,13 +51,14 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--pdf") || args.includes("-p")) {
+    await page.pdf({ path: `./${dirName}/yield_pdf.pdf`, format: "A4" });
   }
 
   if (args.includes("--images") || args.includes("-i")) {
     fs.mkdir(`./${dirName}/images`);
 
     for (let i = 0; i < jsonArr.data.length; i++) {
-      console.log(jsonArr.data[i]);
+      //  console.log(jsonArr.data[i]);
       if (
         jsonArr.data[i].imgURL != undefined &&
         jsonArr.data[i].imgURL.split(".").pop() != "webm"

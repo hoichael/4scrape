@@ -8,7 +8,7 @@ const scrape = require("./scrape");
 const init = () => {
   const args = process.argv.slice(2);
 
-  if (args.length === 0) {
+  if (args.length < 2) {
     console.log(strings.stringObj.errorTextArgs);
   } else if (args.includes("--help") || args.includes("-h")) {
     console.log(strings.stringObj.helpText);
