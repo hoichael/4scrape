@@ -6,6 +6,7 @@ const fs = require("fs/promises");
 const initScrape = async (args) => {
   const browserInstance = await puppeteer.launch({ headless: true });
   const page = await browserInstance.newPage();
+  //  page.setDefaultNavigationTimeout(0);
 
   try {
     await page.goto(args[0]);
@@ -33,7 +34,6 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--json") || args.includes("-j")) {
-    console.log("output: json");
     await fs.writeFile(
       `./${dirName}/yield_json.json`,
       JSON.stringify(jsonArr, null, 2)
@@ -41,7 +41,6 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--screenshot") || args.includes("-s")) {
-    console.log("output: screenshot");
     await page.screenshot({
       path: `./${dirName}/yield_screenshot.png`,
       fullPage: true,
@@ -49,15 +48,27 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--text") || args.includes("-t")) {
-    console.log("output: text");
   }
 
   if (args.includes("--pdf") || args.includes("-p")) {
-    console.log("output: pdf");
   }
 
   if (args.includes("--images") || args.includes("-i")) {
-    console.log("output: images");
+    fs.mkdir(`./${dirName}/images`);
+
+    for (let i = 0; i < jsonArr.data.length; i++) {
+      console.log(jsonArr.data[i]);
+      if (
+        jsonArr.data[i].imgURL != undefined &&
+        jsonArr.data[i].imgURL.split(".").pop() != "webm"
+      ) {
+        const imgPage = await page.goto(`https:${jsonArr.data[i].imgURL}`);
+        fs.writeFile(
+          `./${dirName}/images/${jsonArr.data[i].img}`,
+          await imgPage.buffer()
+        );
+      }
+    }
   }
 };
 
@@ -105,7 +116,7 @@ const getReplies = async (post) => {
 
 const getImage = async (post, asURL) => {
   try {
-    const src = await post.$eval("img", (el) => el.getAttribute("src"));
+    const src = await post.$eval(".fileThumb", (el) => el.getAttribute("href"));
     if (asURL) {
       return src;
     } else {
