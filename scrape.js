@@ -42,6 +42,10 @@ const manageScrape = async (args, page) => {
 
   if (args.includes("--screenshot") || args.includes("-s")) {
     console.log("output: screenshot");
+    await page.screenshot({
+      path: `./${dirName}/yield_screenshot.png`,
+      fullPage: true,
+    });
   }
 
   if (args.includes("--text") || args.includes("-t")) {
