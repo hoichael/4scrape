@@ -48,6 +48,20 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--text") || args.includes("-t")) {
+    let outputString = "";
+    for (let i = 0; i < jsonArr.data.length; i++) {
+      outputString += "\n\n";
+      outputString += `Post Date:     ${jsonArr.data[i].dateTime}\n`;
+      outputString += `Post Number:   ${jsonArr.data[i].postNum}\n`;
+      if (jsonArr.data[i].img !== undefined)
+        outputString += `Image:         ${jsonArr.data[i].img}\n`;
+      outputString += `\n${jsonArr.data[i].message}`;
+      outputString += "\n\n";
+      outputString +=
+        "________________________________________________________________________________________";
+    }
+
+    await fs.writeFile(`./${dirName}/yield_text.txt`, outputString);
   }
 
   if (args.includes("--pdf") || args.includes("-p")) {
