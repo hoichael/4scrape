@@ -31,7 +31,7 @@ const manageScrape = async (args, page) => {
   fs.mkdir(dirName);
 
   if (args.includes("--all") || args.includes("-a")) {
-    args.push("-j", "-s", "-t", "-i", "-p");
+    args.push("-j", "-s", "-t", "-m", "-i", "-p");
   }
 
   if (args.includes("--json") || args.includes("-j")) {
@@ -50,20 +50,33 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--text") || args.includes("-t")) {
-    let outputString = "";
+    let outputStringTXT = "";
     for (let i = 0; i < jsonArr.data.length; i++) {
-      outputString += "\n\n";
-      outputString += `Post Date:     ${jsonArr.data[i].dateTime}\n`;
-      outputString += `Post Number:   ${jsonArr.data[i].postNum}\n`;
+      outputStringTXT += "\n\n";
+      outputStringTXT += `Post Date:     ${jsonArr.data[i].dateTime}\n`;
+      outputStringTXT += `Post Number:   ${jsonArr.data[i].postNum}\n`;
       if (jsonArr.data[i].img !== undefined)
-        outputString += `Image:         ${jsonArr.data[i].img}\n`;
-      outputString += `\n${jsonArr.data[i].message}`;
-      outputString += "\n\n";
-      outputString +=
+        outputStringTXT += `Image:         ${jsonArr.data[i].img}\n`;
+      outputStringTXT += `\n${jsonArr.data[i].message}`;
+      outputStringTXT += "\n\n";
+      outputStringTXT +=
         "________________________________________________________________________________________";
     }
 
-    await fs.writeFile(`./${dirName}/yield_text.txt`, outputString);
+    await fs.writeFile(`./${dirName}/yield_text.txt`, outputStringTXT);
+  }
+
+  if (args.includes("--markdown") || args.includes("-m")) {
+    let outputStringMD = "";
+    for (let i = 0; i < jsonArr.data.length; i++) {
+      outputStringMD += `### No.${jsonArr.data[i].postNum}       ${jsonArr.data[i].dateTime}\n`;
+      outputStringMD += `${jsonArr.data[i].message}\n\n`;
+      if (jsonArr.data[i].img !== undefined)
+        outputStringMD += `![alt text](${jsonArr.data[i].imgURL} "Link to Image (if still online)")\n\n`;
+      outputStringMD += "- - -  \n\n";
+    }
+
+    await fs.writeFile(`./${dirName}/yield_markdown.md`, outputStringMD);
   }
 
   if (args.includes("--pdf") || args.includes("-p")) {
