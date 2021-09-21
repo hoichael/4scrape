@@ -1,6 +1,7 @@
 // imports
 const puppeteer = require("puppeteer");
 const strings = require("./strings");
+const format = require("./format");
 const fs = require("fs/promises");
 
 const initScrape = async (args) => {
@@ -50,33 +51,17 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--text") || args.includes("-t")) {
-    let outputStringTXT = "";
-    for (let i = 0; i < jsonArr.data.length; i++) {
-      outputStringTXT += "\n\n";
-      outputStringTXT += `Post Date:     ${jsonArr.data[i].dateTime}\n`;
-      outputStringTXT += `Post Number:   ${jsonArr.data[i].postNum}\n`;
-      if (jsonArr.data[i].img !== undefined)
-        outputStringTXT += `Image:         ${jsonArr.data[i].img}\n`;
-      outputStringTXT += `\n${jsonArr.data[i].message}`;
-      outputStringTXT += "\n\n";
-      outputStringTXT +=
-        "________________________________________________________________________________________";
-    }
-
-    await fs.writeFile(`./${dirName}/yield_text.txt`, outputStringTXT);
+    await fs.writeFile(
+      `./${dirName}/yield_text.txt`,
+      format.generateTXT(jsonArr)
+    );
   }
 
   if (args.includes("--markdown") || args.includes("-m")) {
-    let outputStringMD = "";
-    for (let i = 0; i < jsonArr.data.length; i++) {
-      outputStringMD += `### No.${jsonArr.data[i].postNum}       ${jsonArr.data[i].dateTime}\n`;
-      outputStringMD += `${jsonArr.data[i].message}\n\n`;
-      if (jsonArr.data[i].img !== undefined)
-        outputStringMD += `![alt text](${jsonArr.data[i].imgURL} "Link to Image (if still online)")\n\n`;
-      outputStringMD += "- - -  \n\n";
-    }
-
-    await fs.writeFile(`./${dirName}/yield_markdown.md`, outputStringMD);
+    await fs.writeFile(
+      `./${dirName}/yield_markdown.md`,
+      format.generateMD(jsonArr)
+    );
   }
 
   if (args.includes("--pdf") || args.includes("-p")) {
