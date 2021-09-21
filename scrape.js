@@ -7,6 +7,7 @@ const initScrape = async (args) => {
   const browserInstance = await puppeteer.launch({ headless: true });
   const page = await browserInstance.newPage();
   //  page.setDefaultNavigationTimeout(0);
+  //  page.setViewport({ width: 1920, height: 1080 });
 
   try {
     await page.goto(args[0]);
@@ -41,6 +42,7 @@ const manageScrape = async (args, page) => {
   }
 
   if (args.includes("--screenshot") || args.includes("-s")) {
+    await clickThumbnails(page);
     await page.screenshot({
       path: `./${dirName}/yield_screenshot.png`,
       fullPage: true,
@@ -139,6 +141,25 @@ const getImage = async (post, asURL) => {
     }
   } catch (error) {
     return undefined;
+  }
+};
+
+const clickThumbnails = async (page) => {
+  const elements = await page.$$(".fileThumb");
+  //  console.log(elements.length);
+
+  for (let i = 0; i < elements.length; i++) {
+    //  const bounds = await elements[i].boundingBox();
+    //  console.log(bounds);
+
+    //  await page.mouse.click(bounds.x + 40, bounds.y + 30);
+
+    await elements[i].hover();
+    await page.mouse.down();
+    await page.mouse.up();
+
+    // give image some time to load
+    await page.waitForTimeout(250);
   }
 };
 
