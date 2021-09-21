@@ -8,11 +8,14 @@ const scrape = require("./scrape");
 const init = () => {
   const args = process.argv.slice(2);
 
-  if (args.length < 2) {
-    console.log(strings.stringObj.errorTextArgs);
-  } else if (args.includes("--help") || args.includes("-h")) {
+  if (args.includes("--help") || args.includes("-h")) {
     console.log(strings.stringObj.helpText);
+    process.exit();
+  } else if (args.length < 2) {
+    console.log(strings.stringObj.errorTextArgs);
+    process.exit();
   } else {
+    console.log(strings.stringObj.initText);
     scrape.initScrape(args);
   }
 };
