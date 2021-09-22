@@ -24,8 +24,6 @@ Running 4scrape with `--help` | `-h` to print the docs:
 
 ##### USAGE:
 
----
-
 Provide a valid URL which resolves to a 4chan thread as  
 first argument.  
 Also provide one or more of the output options listed below  
@@ -35,12 +33,10 @@ as additional argument(s)
 
 ##### OUTPUT OPTIONS:
 
----
-
-`--all` | `-a`          Shorthand for selecting all available options  
-`--images` | `-i`       Get all images from thread and save to disk  
-`--json` | `-j`         Format thread as json and save to disk  
-`--screenshot` | `-s`   Save screenshot of full page to disk  
-`--markdown` | `-m`     Format thread as markdown and save to disk  
-`--text` | `-t`         Format thread as plain text and save to disk  
-`--pdf` | `-p`          Generate pdf from thread and save to disk
+`--all` | `-a`          Shorthand for selecting all available options  
+`--images` | `-i`         Get all images from thread and save to disk  
+`--json` | `-j`                Format thread as json and save to disk  
+`--screenshot` | `-s`            Save screenshot of full page to disk  
+`--markdown` | `-m`        Format thread as markdown and save to disk  
+`--text` | `-t`          Format thread as plain text and save to disk  
+`--pdf` | `-p`              Generate pdf from thread and save to disk
