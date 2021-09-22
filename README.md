@@ -4,6 +4,8 @@
 
 After cloning the repo, run `npm install` from the repository root to install all dependenices listed in the package.json file (currently only puppeteer)
 
+---
+
 ### Examples:
 
 Scrape all relevant information from thread, format it as json and save it to disk:  
