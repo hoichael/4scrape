@@ -6,7 +6,8 @@ const stringObj = {
   errorTextURL: ` - Something went wrong - Exiting Program
  - Most likely the provided URL is invalid`,
 
-  initText: " - Scrape started - This may take a while. . . . . . . . . . . ",
+  initText: ` - Scrape started
+ - Scrape in progress - This may take a while . . . . . . . . .`,
 
   closeText: " - Scrape successfully finished - Exiting Program",
 
