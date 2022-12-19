@@ -95,10 +95,16 @@ const manageScrape = async (args, page) => {
                 const imgPage = await page.goto(
                     `https:${jsonArr.data[i].imgURL}`
                 );
-                fs.writeFile(
-                    `./${dirName}/images/${jsonArr.data[i].img}`,
-                    await imgPage.buffer()
-                );
+                try {
+                    fs.writeFile(
+                        `./${dirName}/images/${jsonArr.data[i].img}`,
+                        await imgPage.buffer()
+                    );
+                } catch (error) {
+                    console.log(
+                        `\n - WARNING: Encountered Error while saving the following image: ${jsonArr.data[i].imgURL} \n   - Skipping Image \n`
+                    );
+                }
             }
         }
     }
