@@ -4,6 +4,8 @@
 
 After cloning the repo, run `npm install` from the repository root to install all dependenices listed in the package.json file (currently only puppeteer)
 
+NOTE: If the program doesn't work as expected you may need to update puppeteer -> `npm install puppeteer@latest`
+
 ---
 
 ### Usage:
